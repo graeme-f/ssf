@@ -184,6 +184,7 @@ class AuthS3(Auth):
         session = current.session
         settings = self.settings
         messages = self.messages
+        T = current.T
 
         # User table
         if not settings.table_user:
@@ -760,6 +761,22 @@ class AuthS3(Auth):
                         SPAN("*", _class="req"),
                 "", _id=field_id + SQLFORM.ID_ROW_SUFFIX))
                 #form[0].insert(i + 1, row)
+        # 
+        if True: # @todo deployment setting ?
+            field_id = "%s_opt_in" % user._tablename
+            comment = DIV(DIV(_class="tooltip",
+                            _title="%s|%s" % ("Mailing list",
+                                              "By selecting this you agree that we may contact you.")))
+            form[0].insert(-1,
+                           TR(TD(LABEL("%s:" % "Receive updates",
+                                       _for="opt_in",
+                                       _id=field_id + SQLFORM.ID_LABEL_SUFFIX),
+                                 _class="w2p_fl"),
+                                 INPUT(_name="opt_in", _id=field_id, _type="checkbox"),
+                              TD(comment,
+                                 _class="w2p_fc"),
+                           _id=field_id + SQLFORM.ID_ROW_SUFFIX))
+
         # S3: Insert Mobile phone field into form
         if deployment_settings.get_auth_registration_requests_mobile_phone():
             field_id = "%s_mobile" % user._tablename
@@ -1271,6 +1288,7 @@ class AuthS3(Auth):
                 first_name = user.first_name
                 last_name = user.last_name
                 email = user.email.lower()
+                opt_in = current.request.vars.get("opt_in", None)!=None
                 query = (ptable.first_name == first_name) & \
                         (ptable.last_name == last_name) & \
                         (ctable.pe_id == ptable.pe_id) & \
@@ -1324,6 +1342,7 @@ class AuthS3(Auth):
                                            track_id = track_id,
                                            first_name = first_name,
                                            last_name = last_name,
+                                           opt_in = opt_in,
                                            modified_by = user.id,
                                            **owner)
 

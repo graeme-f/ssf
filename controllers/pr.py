@@ -142,6 +142,8 @@ def person():
             elif r.id:
                 r.table.volunteer.readable = True
                 r.table.volunteer.writable = True
+                r.table.opt_in.readable = True
+                r.table.opt_in.writable = True
 
         return True
     response.s3.prep = prep

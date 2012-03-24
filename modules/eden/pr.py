@@ -617,6 +617,14 @@ class S3PersonModel(S3Model):
                                    comment = DIV(_class="tooltip",
                                                  _title="%s|%s" % (T("Picture"),
                                                                    T("Upload an image file here.")))),
+                             Field("opt_in",
+                                   "boolean",
+                                   default=False,
+                                   label = T("Receive updates"),
+                                   comment = DIV(DIV(_class="tooltip",
+                                                     _title="%s|%s" % (T("Mailing list"),
+                                                                       T("By selecting this you agree that we may contact you.")))),
+                                   ),
                              s3.comments(),
                              *(s3.lx_fields() + s3.meta_fields()))
 
