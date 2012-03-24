@@ -647,6 +647,14 @@ class S3PersonModel(S3Model):
             msg_record_deleted = T("Person deleted"),
             msg_list_empty = T("No Persons currently registered"))
 
+        # add an opt in clause to receive emails depending on the deployment settings
+        if current.deployment_settings.get_auth_opt_in_to_email():
+            table.opt_in.readable = True
+            table.opt_in.writable = True
+        else:
+            table.opt_in.readable = False
+            table.opt_in.writable = False
+
         # Search method
         pr_person_search = S3PersonSearch(
                                 name="person_search_simple",
